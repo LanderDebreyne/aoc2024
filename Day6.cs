@@ -1,46 +1,43 @@
-﻿namespace AdventOfCode
+﻿using System;
+
+namespace AdventOfCode
 {
-    enum State
+    public class Day6: BaseDayInputAsStringArray
     {
-        Obstacle,
-        Unvisited,
-        Visited
-    }
+        private readonly bool[,] _obstacleMap;
+        private readonly bool[,] _visitedMap;
+        private (int, int) _guard;
 
-    enum Direction
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
+        public Day6() : base(nameof(Day6)) 
+        {
+            _obstacleMap = new bool[Input.Length, Input[0].Length];
+            _visitedMap = new bool[Input.Length, Input[0].Length];
+        }
 
-    public class Day6() : BaseDayInputAsStringArray(nameof(Day6))
-    {
+
         public override int SolvePart1()
         {
-            var (map, guard) = InitMap();
-            return FillMap(map, guard).Visited;
+            InitMap();
+            return FillMap();
         }
 
         public override int SolvePart2()
         {
-            var (map, guard) = InitMap();
-            var start = guard;
+            InitMap();
+            var start = (_guard.Item1, _guard.Item2);
 
-            map = FillMap(map, guard).Map;
+            FillMap();
 
-            // brute force
             int r = 0;
             for (int i = 0; i < Input.Length; i++)
             {
                 for (int j = 0; j < Input[0].Length; j++)
                 {
-                    if (map[(i,j)] == State.Visited && (i,j) != start)
+                    if (_visitedMap[i,j] && (i,j) != start)
                     {
-                        map[(i,j)] = State.Obstacle;
-                        if(IsLoop(start, map)) r++;
-                        map[(i, j)] = State.Visited;
+                        _obstacleMap[i,j] = true;
+                        if(IsLoop(start)) r++;
+                        _obstacleMap[i, j] = false;
                     }
                 }
             }
@@ -48,103 +45,100 @@
             return r;
         }
 
-        private (Dictionary<(int, int), State> Map, int Visited) FillMap(Dictionary<(int, int), State> map, (int, int) guard)
+        private int FillMap()
         {
-            var dir = Direction.Up;
+            int dirX = 0;
+            int dirY = -1;
             int visited = 1;
+            int height = Input.Length;
+            int width = Input[0].Length;
             while (true)
             {
-                var nextPos = Move(guard, dir);
-                if (!InMap(nextPos))
+                var nextPos = (_guard.Item1 + dirY, _guard.Item2 + dirX);
+                if (!(nextPos.Item1 >= 0 && nextPos.Item1 < height && nextPos.Item2 >= 0 && nextPos.Item2 < width))
                 {
-                    return (map, visited);
+                    return visited;
                 }
-                if (map[nextPos] == State.Obstacle)
+                if (_obstacleMap[nextPos.Item1, nextPos.Item2])
                 {
-                    dir = NextDir(dir);
+                    (dirX, dirY) = NextDir(dirX, dirY);
                 }
                 else
                 {
-                    guard = nextPos;
-                    if (map[nextPos] == State.Unvisited)
+                    _guard = nextPos;
+                    if (!_visitedMap[nextPos.Item1, nextPos.Item2])
                     {
-                        map[nextPos] = State.Visited;
+                        _visitedMap[nextPos.Item1, nextPos.Item2] = true;
                         visited++;
                     }
                 }
             }
         }
 
-        private (Dictionary<(int,int), State> map, (int, int) guard) InitMap()
+        private void InitMap()
         {
-            Dictionary<(int, int), State> map = [];
-            var guard = (0,0);
+            Array.Clear(_obstacleMap, 0, _obstacleMap.Length);
+            Array.Clear(_visitedMap, 0, _visitedMap.Length);
             for (int i = 0; i < Input.Length; i++)
             {
                 for (int j = 0; j < Input[0].Length; j++)
                 {
-                    if (Input[i][j] == '^')
+                    switch (Input[i][j])
                     {
-                        guard = (i, j);
-                        map.Add((i, j), State.Visited);
+                        case '^':
+                            _guard = (i, j);
+                            _visitedMap[i, j] = true;
+                            break;
+                        case '#':
+                            _obstacleMap[i, j] = true;
+                            break;
                     }
-                    else if (Input[i][j] == '#') map.Add((i, j), State.Obstacle);
-                    else map.Add((i, j), State.Unvisited);
                 }
             }
-
-            return (map, guard);
+            return;
         }
 
-        private bool IsLoop((int, int) guard, Dictionary<(int,int), State> map)
+        private bool IsLoop((int, int) guard)
         {
-            Direction dir = Direction.Up;
-            int max = map.Count;
+            int dirX = 0;
+            int dirY = -1;
+            var visitedStates = new HashSet<(int, int, int, int)>();
+            int height = Input.Length;
+            int width = Input[0].Length;
+            int max = height*width;
             while (max > 0)
             {
-                var nextPos = Move(guard, dir);
-                if (!InMap(nextPos))
+                var nextPos = (guard.Item1+dirY, guard.Item2+dirX);
+                if (!(nextPos.Item1 >= 0 && nextPos.Item1 < height && nextPos.Item2 >= 0 && nextPos.Item2 < width))
                 {
                     return false;
                 }
-                if (map[nextPos] == State.Obstacle)
+                if (_obstacleMap[nextPos.Item1, nextPos.Item2])
                 {
-                    dir = NextDir(dir);
+                    (dirX, dirY) = NextDir(dirX,dirY);
                 }
                 else
                 {
                     guard = nextPos;
+                    var state = (guard.Item1, guard.Item2, dirX, dirY);
+                    if (!visitedStates.Add(state))
+                    {
+                        return true;
+                    }
                 }
                 max--;
             }
             return true;
         }
 
-        private bool InMap((int, int) guard)
+        private static (int, int) NextDir(int dirX, int dirY)
         {
-            return guard.Item1 >= 0 && guard.Item1 < Input.Length && guard.Item2 >= 0 && guard.Item2 < Input.Length;
-        }
-
-        private static (int, int) Move((int, int) guard, Direction dir)
-        {
-            return dir switch
+            return (dirX, dirY) switch
             {
-                Direction.Up => (guard.Item1 - 1, guard.Item2),
-                Direction.Down => (guard.Item1 + 1, guard.Item2),
-                Direction.Left => (guard.Item1, guard.Item2 - 1),
-                Direction.Right => (guard.Item1, guard.Item2 + 1),
-                _ => throw new NotImplementedException(),
-            };
-        }
-
-        private static Direction NextDir(Direction dir)
-        {
-            return dir switch
-            {
-                Direction.Up => Direction.Right,
-                Direction.Down => Direction.Left,
-                Direction.Left => Direction.Up,
-                Direction.Right => Direction.Down,
+                (0,-1) => (1,0),
+                (0,1) => (-1,0),
+                (-1,0) => (0,-1),
+                (1,0) => (0,1),
                 _ => throw new NotImplementedException(),
             };
         }
