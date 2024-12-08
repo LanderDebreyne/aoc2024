@@ -4,12 +4,12 @@ namespace AdventOfCode;
 
 internal partial class Day3() : BaseDayInputAsString(nameof(Day3))
 {
-    public override int SolvePart1()
+    public override long SolvePart1()
     {
         return MulString(Input);
     }
 
-    public override int SolvePart2()
+    public override long SolvePart2()
     {
         return EnabledMulString(Input);
     }

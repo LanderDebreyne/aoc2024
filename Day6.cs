@@ -15,13 +15,13 @@ namespace AdventOfCode
         }
 
 
-        public override int SolvePart1()
+        public override long SolvePart1()
         {
             InitMap();
             return FillMap();
         }
 
-        public override int SolvePart2()
+        public override long SolvePart2()
         {
             InitMap();
             var start = (_guard.Item1, _guard.Item2);

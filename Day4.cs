@@ -4,7 +4,7 @@ namespace AdventOfCode;
 
 internal partial class Day4() : BaseDayInputAsStringArray(nameof(Day4))
 {
-    public override int SolvePart1()
+    public override long SolvePart1()
     {
         int r = 0;
 
@@ -31,7 +31,7 @@ internal partial class Day4() : BaseDayInputAsStringArray(nameof(Day4))
         return r;
     }
 
-    public override int SolvePart2()
+    public override long SolvePart2()
     {
         int r = 0;
 

@@ -2,7 +2,7 @@
 
 internal class Day2() : BaseDayInputInLines(nameof(Day2))
 {
-    public override int SolvePart1()
+    public override long SolvePart1()
     {
         int result = 0;
         foreach (var line in Input)
@@ -42,7 +42,7 @@ internal class Day2() : BaseDayInputInLines(nameof(Day2))
         return result;
     }
 
-    public override int SolvePart2()
+    public override long SolvePart2()
     {
         int result = 0;
         foreach (var line in Input)

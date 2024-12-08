@@ -4,8 +4,8 @@
     {
         internal string InputFilePath => $"./input/{day}.txt";
 
-        public abstract int SolvePart1();
-        public abstract int SolvePart2();
+        public abstract long SolvePart1();
+        public abstract long SolvePart2();
     }
 
     public abstract class BaseDayInputInLines(string day) : BaseDay(day)

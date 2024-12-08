@@ -3,7 +3,7 @@ namespace AdventOfCode
 {
     public class Day5() : BaseDayInputInLines(nameof(Day5))
     {
-        public override int SolvePart1()
+        public override long SolvePart1()
         {
             Dictionary<(int, int), bool> ordering = [];
             int skip = 0;
@@ -38,7 +38,7 @@ namespace AdventOfCode
             return r;
         }
 
-        public override int SolvePart2()
+        public override long SolvePart2()
         {
             Dictionary<(int, int), bool> ordering = [];
             int skip = 0;

@@ -2,7 +2,7 @@
 
 internal class Day1() : BaseDayInputInLines(nameof(Day1))
 {
-    public override int SolvePart1()
+    public override long SolvePart1()
     {
         List<int> firstList = [];
         List<int> secondList = [];
@@ -19,7 +19,7 @@ internal class Day1() : BaseDayInputInLines(nameof(Day1))
         return firstList.Select((i, index) => Math.Abs(secondList[index] - i)).Sum();
     }
 
-    public override int SolvePart2()
+    public override long SolvePart2()
     {
         Dictionary<int, (int, int)> map = [];
         foreach (var line in Input)
