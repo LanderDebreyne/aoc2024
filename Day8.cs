@@ -1,10 +1,10 @@
 ﻿namespace AdventOfCode
 {
-    public class Day8 : BaseDayInputAsStringArray
+    public class Day8 : BaseDayInputAsStringArray<long>
     {
         private readonly int _n;
         private readonly bool[,] _antiNodes;
-        private Dictionary<char, HashSet<Point>> _antennas;
+        private readonly Dictionary<char, HashSet<Point>> _antennas;
 
         private struct Point
         {

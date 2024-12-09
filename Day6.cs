@@ -2,7 +2,7 @@
 
 namespace AdventOfCode
 {
-    public class Day6: BaseDayInputAsStringArray
+    public class Day6: BaseDayInputAsStringArray<long>
     {
         private readonly bool[,] _obstacleMap;
         private readonly bool[,] _visitedMap;

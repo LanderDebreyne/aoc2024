@@ -2,7 +2,7 @@
 
 namespace AdventOfCode;
 
-internal partial class Day4() : BaseDayInputAsStringArray(nameof(Day4))
+internal partial class Day4() : BaseDayInputAsStringArray<long>(nameof(Day4))
 {
     public override long SolvePart1()
     {

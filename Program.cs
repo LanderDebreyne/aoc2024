@@ -15,7 +15,8 @@
         Day5 = 5,
         Day6 = 6,
         Day7 = 7,
-        Day8 = 8
+        Day8 = 8,
+        Day9 = 9,
     }
 
     class Program
@@ -40,7 +41,7 @@
                     return;
                 }
 
-                BaseDay? dayInstance = (BaseDay?)Activator.CreateInstance(dayType);
+                var dayInstance = Activator.CreateInstance(dayType);
 
                 if (dayInstance == null)
                 {
@@ -48,9 +49,9 @@
                     return;
                 }
 
-                long? result = part == Part.Part1
-                    ? dayInstance?.SolvePart1()
-                    : part == Part.Part2 ? dayInstance?.SolvePart2() : null;
+                object? result = part == Part.Part1
+                    ? dayInstance?.GetType().GetMethod("SolvePart1")?.Invoke(dayInstance, null)
+                    : part == Part.Part2 ? dayInstance?.GetType().GetMethod("SolvePart2")?.Invoke(dayInstance, null) : null;
 
                 if (result == null)
                 {
