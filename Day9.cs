@@ -33,9 +33,72 @@
         {
             ParseDisk();
 
-            // TODO
+            int lastPointer = _disk.Count - 1;
+            long curId = _disk[lastPointer];
+            while (lastPointer > 0)
+            {
+                (lastPointer, curId) = FormatDisk(lastPointer, curId);
+            }
 
             return CheckSum();
+        }
+
+        private (int, long) FormatDisk(int lastPointer, long curId)
+        {
+            while (_disk[lastPointer] == -1 || _disk[lastPointer] > curId)
+            {
+                lastPointer--;
+                if (lastPointer < 0) return (-1, curId);
+            }
+            curId = _disk[lastPointer];
+            int len = LengthOfBlock(lastPointer, curId);
+            if (len > 0)
+            {
+                int firstEmptyBlockIndex = FirstEmptyBlock(len, lastPointer);
+                if (firstEmptyBlockIndex != -1) MoveBlock(firstEmptyBlockIndex, lastPointer, len);
+            }
+            return (lastPointer - len, curId);
+        } 
+
+        private void MoveBlock(int firstPointer, int lastPointer, long len)
+        {
+            for (int i = 0; i < len; i++)
+            {
+                _disk[firstPointer + i] = _disk[lastPointer - i];
+                _disk[lastPointer - i] = -1;
+            }
+        }
+
+        private int LengthOfBlock(int pointer, long curId)
+        {
+            int len = 0;
+            while (_disk[pointer] == curId)
+            {
+                len++;
+                pointer--;
+                if (pointer < 0) return len;
+            }
+            return len;
+        }
+
+        private int FirstEmptyBlock(long len, int lastPointer)
+        {
+            for (int i = 0; i <= lastPointer-len; i++)
+            {
+                if (_disk[i] == -1)
+                {
+                    int j = i;
+                    while (_disk[j] == -1 && j >= 0)
+                    {
+                        j--;
+                    }
+                    if (i - j >= len)
+                    {
+                        return j + 1;
+                    }
+                }
+            }
+            return -1;
         }
 
         private void ParseDisk()
