@@ -17,6 +17,7 @@
         Day7 = 7,
         Day8 = 8,
         Day9 = 9,
+        Day10 = 10,
     }
 
     class Program
