@@ -4,16 +4,17 @@ namespace AdventOfCode
 {
     public class Day6: BaseDayInputAsStringArray<long>
     {
+        private readonly int _n;
         private readonly bool[,] _obstacleMap;
         private readonly bool[,] _visitedMap;
         private (int, int) _guard;
 
         public Day6() : base(nameof(Day6)) 
         {
+            _n = Input.Length;
             _obstacleMap = new bool[Input.Length, Input[0].Length];
             _visitedMap = new bool[Input.Length, Input[0].Length];
         }
-
 
         public override long SolvePart1()
         {
@@ -29,9 +30,9 @@ namespace AdventOfCode
             FillMap();
 
             int r = 0;
-            for (int i = 0; i < Input.Length; i++)
+            for (int i = 0; i < _n; i++)
             {
-                for (int j = 0; j < Input[0].Length; j++)
+                for (int j = 0; j < _n; j++)
                 {
                     if (_visitedMap[i,j] && (i,j) != start)
                     {
@@ -50,12 +51,10 @@ namespace AdventOfCode
             int dirX = 0;
             int dirY = -1;
             int visited = 1;
-            int height = Input.Length;
-            int width = Input[0].Length;
             while (true)
             {
                 var nextPos = (_guard.Item1 + dirY, _guard.Item2 + dirX);
-                if (!(nextPos.Item1 >= 0 && nextPos.Item1 < height && nextPos.Item2 >= 0 && nextPos.Item2 < width))
+                if (!(nextPos.Item1 >= 0 && nextPos.Item1 < _n && nextPos.Item2 >= 0 && nextPos.Item2 < _n))
                 {
                     return visited;
                 }
@@ -79,11 +78,12 @@ namespace AdventOfCode
         {
             Array.Clear(_obstacleMap, 0, _obstacleMap.Length);
             Array.Clear(_visitedMap, 0, _visitedMap.Length);
-            for (int i = 0; i < Input.Length; i++)
+            for (int i = 0; i < _n; i++)
             {
-                for (int j = 0; j < Input[0].Length; j++)
+                string line = Input[i];
+                for (int j = 0; j < _n; j++)
                 {
-                    switch (Input[i][j])
+                    switch (line[j])
                     {
                         case '^':
                             _guard = (i, j);
@@ -103,13 +103,11 @@ namespace AdventOfCode
             int dirX = 0;
             int dirY = -1;
             var visitedStates = new HashSet<(int, int, int, int)>();
-            int height = Input.Length;
-            int width = Input[0].Length;
-            int max = height*width;
+            int max = _n*_n;
             while (max > 0)
             {
                 var nextPos = (guard.Item1+dirY, guard.Item2+dirX);
-                if (!(nextPos.Item1 >= 0 && nextPos.Item1 < height && nextPos.Item2 >= 0 && nextPos.Item2 < width))
+                if (!(nextPos.Item1 >= 0 && nextPos.Item1 < _n && nextPos.Item2 >= 0 && nextPos.Item2 < _n))
                 {
                     return false;
                 }

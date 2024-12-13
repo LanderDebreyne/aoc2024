@@ -101,17 +101,24 @@
                     Console.WriteLine($"Instance for {day} could not be activated");
                     return;
                 }
-                var sw = new System.Diagnostics.Stopwatch();
+                var sw = System.Diagnostics.Stopwatch.StartNew();
                 object? result1 = dayInstance?.GetType().GetMethod("SolvePart1")?.Invoke(dayInstance, null);
                 if (sw.ElapsedMilliseconds > 1000)
                 {
                     Console.WriteLine($"Part1 took too long for Day {day}, took {sw.ElapsedMilliseconds}ms");
                     return;
                 }
+                Console.WriteLine($"Part1 passed for {day}, took {sw.ElapsedMilliseconds}ms");
                 var expectedResult = typeof(Results.Results).GetField($"{day}Part1")?.GetValue(null);
                 if (!result1?.Equals(expectedResult) ?? true)
                 {
                     Console.WriteLine($"Part1 failed for {day}");
+                    return;
+                }
+                dayInstance = Activator.CreateInstance(dayType);
+                if (dayInstance == null)
+                {
+                    Console.WriteLine($"Instance for {day} could not be activated");
                     return;
                 }
                 sw.Restart();
@@ -121,6 +128,7 @@
                     Console.WriteLine($"Part2 took too long for {day}, took {sw.ElapsedMilliseconds}ms");
                     return;
                 }
+                Console.WriteLine($"Part2 passed for {day}, took {sw.ElapsedMilliseconds}ms");
                 expectedResult = typeof(Results.Results).GetField($"{day}Part2")?.GetValue(null);
                 if (!result2?.Equals(expectedResult) ?? true)
                 {

@@ -16,9 +16,10 @@
         {
             for (int i = 0; i < _n; i++)
             {
+                string line = Input[i];
                 for (int j = 0; j < _n; j++)
                 {
-                    int height = int.Parse($"{Input[i][j]}");
+                    int height = int.Parse($"{line[j]}");
                     if (height == 0)
                     {
                         _possibleStarts.Add((i, j));
@@ -38,9 +39,10 @@
         {
             for (int i = 0; i < _n; i++)
             {
+                string line = Input[i];
                 for (int j = 0; j < _n; j++)
                 {
-                    int height = int.Parse($"{Input[i][j]}");
+                    int height = int.Parse($"{line[j]}");
                     if (height == 0)
                     {
                         _possibleStarts.Add((i, j));

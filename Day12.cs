@@ -19,18 +19,19 @@
         {
             for (int i = 0; i < _n; i++)
             {
+                string line = Input[i];
                 for (int j = 0; j < _n; j++)
                 {
                     if (!_visited[i, j])
                     {
                         _current = [(i, j)];
                         _visited[i, j] = true;
-                        FillRegions(i-1, j, Input[i][j]);
-                        FillRegions(i+1, j, Input[i][j]);
-                        FillRegions(i, j-1, Input[i][j]);
-                        FillRegions(i, j+1, Input[i][j]);
+                        FillRegions(i-1, j, line[j]);
+                        FillRegions(i+1, j, line[j]);
+                        FillRegions(i, j-1, line[j]);
+                        FillRegions(i, j+1, line[j]);
 
-                        _regions.Add((Input[i][j], _current));
+                        _regions.Add((line[j], _current));
                     }
                 }
             }
@@ -50,18 +51,19 @@
         {
             for (int i = 0; i < _n; i++)
             {
+                string line = Input[i];
                 for (int j = 0; j < _n; j++)
                 {
                     if (!_visited[i, j])
                     {
                         _current = [(i, j)];
                         _visited[i, j] = true;
-                        FillRegions(i - 1, j, Input[i][j]);
-                        FillRegions(i + 1, j, Input[i][j]);
-                        FillRegions(i, j - 1, Input[i][j]);
-                        FillRegions(i, j + 1, Input[i][j]);
+                        FillRegions(i - 1, j, line[j]);
+                        FillRegions(i + 1, j, line[j]);
+                        FillRegions(i, j - 1, line[j]);
+                        FillRegions(i, j + 1, line[j]);
 
-                        _regions.Add((Input[i][j], _current));
+                        _regions.Add((line[j], _current));
                     }
                 }
             }

@@ -36,7 +36,7 @@
                 plusList[0] = plusList[0] + terms.First();
                 mulList[0] = mulList[0] * terms.First();
                 conList[0] = long.Parse(terms.First().ToString() + conList[0].ToString());
-                return CombineTerms(plusList, goal, con) || CombineTerms(mulList, goal, con) || (con ? CombineTerms(conList, goal, con) : false);
+                return CombineTerms(plusList, goal, con) || CombineTerms(mulList, goal, con) || (con && CombineTerms(conList, goal, con));
             }
         }
     }

@@ -29,14 +29,15 @@
             long r = 0;
             for (int i = 0; i < _n; i++)
             {
-                for (int j = 0; j < Input.Length; j++)
+                string line = Input[i];
+                for (int j = 0; j < _n; j++)
                 {
-                    switch (Input[i][j])
+                    switch (line[j])
                     {
                         case '.':
                             break;
                         default:
-                            r += HandleAntenna(Input[i][j], i, j, part);
+                            r += HandleAntenna(line[j], i, j, part);
                             break;
                     }
                 }
@@ -67,8 +68,9 @@
                             antiNodes++;
                         }
                         if (part) break;
-                        antiNode1.X += -dx;
-                        antiNode1.Y += -dy;
+                        antiNode1.X -= dx;
+                        antiNode1.Y -= dy;
+
                     }
                     while (InMap(antiNode2.X, antiNode2.Y))
                     {
@@ -89,7 +91,7 @@
 
         private bool InMap(int x, int y)
         {
-            return x >= 0 && x < Input.Length && y >= 0 && y < Input.Length;
+            return x >= 0 && x < _n && y >= 0 && y < _n;
         }
     }
 }
