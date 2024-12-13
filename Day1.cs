@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode;
 
-internal class Day1() : BaseDayInputInLines<long>(nameof(Day1))
+public class Day1() : BaseDayInputInLines<long>(nameof(Day1))
 {
     public override long SolvePart1()
     {

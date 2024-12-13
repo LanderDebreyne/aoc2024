@@ -13,10 +13,10 @@
                 long aX = long.Parse(Input.ElementAt(i)[(Input.ElementAt(i).IndexOf("X+") + 2)..Input.ElementAt(i).IndexOf(",")]);
                 long aY = long.Parse(Input.ElementAt(i)[(Input.ElementAt(i).IndexOf("Y+") + 2)..]);
 
-                long bX = long.Parse(Input.ElementAt(i + 1)[(Input.ElementAt(i + 1).IndexOf("X+") + 2)..Input.ElementAt(i + 1).IndexOf(",")]);
+                long bX = long.Parse(Input.ElementAt(i + 1)[(Input.ElementAt(i + 1).IndexOf("X+") + 2)..Input.ElementAt(i + 1).IndexOf(',')]);
                 long bY = long.Parse(Input.ElementAt(i + 1)[(Input.ElementAt(i + 1).IndexOf("Y+") + 2)..]);
 
-                long pX = long.Parse(Input.ElementAt(i + 2)[(Input.ElementAt(i + 2).IndexOf("X=") + 2)..Input.ElementAt(i + 2).IndexOf(",")]);
+                long pX = long.Parse(Input.ElementAt(i + 2)[(Input.ElementAt(i + 2).IndexOf("X=") + 2)..Input.ElementAt(i + 2).IndexOf(',')]);
                 long pY = long.Parse(Input.ElementAt(i + 2)[(Input.ElementAt(i + 2).IndexOf("Y=") + 2)..]);
                 pX += part ? 0 : 10000000000000;
                 pY += part ? 0 : 10000000000000;

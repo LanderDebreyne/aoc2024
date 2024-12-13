@@ -21,6 +21,7 @@
         Day11 = 11,
         Day12 = 12,
         Day13 = 13,
+        All = -1,
     }
 
     class Program
@@ -29,6 +30,12 @@
         {
             Console.Write("Enter day number (1-25): ");
             Day? day = (Day)int.Parse(Console.ReadLine() ?? throw new Exception("Please give input."));
+
+            if(day == Day.All)
+            {
+                RunTestSuite();
+                return;
+            }
 
             Console.Write("Enter part (1 or 2): ");
             Part? part = (Part?)int.Parse(Console.ReadLine() ?? throw new Exception("Please give input."));
@@ -70,6 +77,58 @@
             {
                 Console.WriteLine($"Error: {ex}");
             }
+        }
+
+        private static void RunTestSuite()
+        {
+            var globalSw = System.Diagnostics.Stopwatch.StartNew();
+            foreach (Day day in Enum.GetValues<Day>())
+            {
+                Console.WriteLine($"Running tests for {day}");
+                if (day == Day.All)
+                {
+                    continue;
+                }
+                Type? dayType = Type.GetType("AdventOfCode." + day);
+                if (dayType == null)
+                {
+                    Console.WriteLine($"No solutions found for {day}");
+                    return;
+                }
+                var dayInstance = Activator.CreateInstance(dayType);
+                if (dayInstance == null)
+                {
+                    Console.WriteLine($"Instance for {day} could not be activated");
+                    return;
+                }
+                var sw = new System.Diagnostics.Stopwatch();
+                object? result1 = dayInstance?.GetType().GetMethod("SolvePart1")?.Invoke(dayInstance, null);
+                if (sw.ElapsedMilliseconds > 1000)
+                {
+                    Console.WriteLine($"Part1 took too long for Day {day}, took {sw.ElapsedMilliseconds}ms");
+                    return;
+                }
+                var expectedResult = typeof(Results.Results).GetField($"{day}Part1")?.GetValue(null);
+                if (!result1?.Equals(expectedResult) ?? true)
+                {
+                    Console.WriteLine($"Part1 failed for {day}");
+                    return;
+                }
+                sw.Restart();
+                object? result2 = dayInstance?.GetType().GetMethod("SolvePart2")?.Invoke(dayInstance, null);
+                if (sw.ElapsedMilliseconds > 1000)
+                {
+                    Console.WriteLine($"Part2 took too long for {day}, took {sw.ElapsedMilliseconds}ms");
+                    return;
+                }
+                expectedResult = typeof(Results.Results).GetField($"{day}Part2")?.GetValue(null);
+                if (!result2?.Equals(expectedResult) ?? true)
+                {
+                    Console.WriteLine($"Part2 failed for {day}");
+                    return;
+                }
+            }
+            Console.WriteLine($"All tests passed, took {globalSw.ElapsedMilliseconds}ms");
         }
     }
 }
