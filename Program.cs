@@ -19,6 +19,8 @@
         Day9 = 9,
         Day10 = 10,
         Day11 = 11,
+        Day12 = 12,
+        Day13 = 13,
     }
 
     class Program
