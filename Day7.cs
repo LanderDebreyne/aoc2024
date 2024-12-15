@@ -26,16 +26,16 @@
         {
             if (terms.Count == 1)
             {
-                return terms.First() == goal;
+                return terms[0] == goal;
             }
             else
             {
                 var plusList = terms.Skip(1).ToList();
                 var mulList = terms.Skip(1).ToList();
                 var conList = terms.Skip(1).ToList();
-                plusList[0] = plusList[0] + terms.First();
-                mulList[0] = mulList[0] * terms.First();
-                conList[0] = long.Parse(terms.First().ToString() + conList[0].ToString());
+                plusList[0] = plusList[0] + terms[0];
+                mulList[0] = mulList[0] * terms[0];
+                conList[0] = long.Parse(terms[0].ToString() + conList[0].ToString());
                 return CombineTerms(plusList, goal, con) || CombineTerms(mulList, goal, con) || (con && CombineTerms(conList, goal, con));
             }
         }

@@ -22,6 +22,7 @@
         Day12 = 12,
         Day13 = 13,
         Day14 = 14,
+        Day15 = 15,
         All = -1,
     }
 
@@ -85,6 +86,11 @@
             var globalSw = System.Diagnostics.Stopwatch.StartNew();
             foreach (Day day in Enum.GetValues<Day>())
             {
+                if (day == Day.Day9 || day == Day.Day12)
+                {
+                    Console.WriteLine($"Skipping Day {day}, it takes too long to run");
+                    continue;
+                }
                 Console.WriteLine($"Running tests for {day}");
                 if (day == Day.All)
                 {

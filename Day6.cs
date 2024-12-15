@@ -8,6 +8,9 @@ namespace AdventOfCode
         private readonly bool[,] _obstacleMap;
         private readonly bool[,] _visitedMap;
         private (int, int) _guard;
+        private (int, int) _start;
+        private bool _loop = false;
+        private readonly (int, int)[] _dirs = [(0, -1), (1, 0), (0, 1), (-1, 0)];
 
         public Day6() : base(nameof(Day6)) 
         {
@@ -25,7 +28,7 @@ namespace AdventOfCode
         public override long SolvePart2()
         {
             InitMap();
-            var start = (_guard.Item1, _guard.Item2);
+            _start = (_guard.Item1, _guard.Item2);
 
             FillMap();
 
@@ -34,10 +37,12 @@ namespace AdventOfCode
             {
                 for (int j = 0; j < _n; j++)
                 {
-                    if (_visitedMap[i,j] && (i,j) != start)
+                    if (_visitedMap[i,j] && !_start.Equals((i,j)))
                     {
                         _obstacleMap[i,j] = true;
-                        if(IsLoop(start)) r++;
+                        CheckLoop();
+                        if (_loop) r++;
+                        _loop = false;
                         _obstacleMap[i, j] = false;
                     }
                 }
@@ -48,19 +53,19 @@ namespace AdventOfCode
 
         private int FillMap()
         {
-            int dirX = 0;
-            int dirY = -1;
+            int dir = 0;
             int visited = 1;
             while (true)
             {
-                var nextPos = (_guard.Item1 + dirY, _guard.Item2 + dirX);
+                var nextPos = (_guard.Item1 + _dirs[dir].Item2, _guard.Item2 + _dirs[dir].Item1);
                 if (!(nextPos.Item1 >= 0 && nextPos.Item1 < _n && nextPos.Item2 >= 0 && nextPos.Item2 < _n))
                 {
                     return visited;
                 }
                 if (_obstacleMap[nextPos.Item1, nextPos.Item2])
                 {
-                    (dirX, dirY) = NextDir(dirX, dirY);
+                    dir++;
+                    dir %= 4;
                 }
                 else
                 {
@@ -98,47 +103,34 @@ namespace AdventOfCode
             return;
         }
 
-        private bool IsLoop((int, int) guard)
+        private void CheckLoop()
         {
-            int dirX = 0;
-            int dirY = -1;
-            var visitedStates = new HashSet<(int, int, int, int)>();
-            int max = _n*_n;
-            while (max > 0)
+            (int, int) guard = _start;
+            int dir = 0;
+            var visitedStates = new HashSet<(int, int, int)>();
+            while (true)
             {
-                var nextPos = (guard.Item1+dirY, guard.Item2+dirX);
+                var nextPos = (guard.Item1 + _dirs[dir].Item2, guard.Item2 + _dirs[dir].Item1);
                 if (!(nextPos.Item1 >= 0 && nextPos.Item1 < _n && nextPos.Item2 >= 0 && nextPos.Item2 < _n))
                 {
-                    return false;
+                    return;
                 }
                 if (_obstacleMap[nextPos.Item1, nextPos.Item2])
                 {
-                    (dirX, dirY) = NextDir(dirX,dirY);
+                    dir++;
+                    dir %= 4;
                 }
                 else
                 {
                     guard = nextPos;
-                    var state = (guard.Item1, guard.Item2, dirX, dirY);
+                    var state = (guard.Item1, guard.Item2, dir);
                     if (!visitedStates.Add(state))
                     {
-                        return true;
+                        _loop = true;
+                        return;
                     }
                 }
-                max--;
             }
-            return true;
-        }
-
-        private static (int, int) NextDir(int dirX, int dirY)
-        {
-            return (dirX, dirY) switch
-            {
-                (0,-1) => (1,0),
-                (0,1) => (-1,0),
-                (-1,0) => (0,-1),
-                (1,0) => (0,1),
-                _ => throw new NotImplementedException(),
-            };
         }
     }
 }
