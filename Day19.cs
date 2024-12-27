@@ -6,7 +6,7 @@
         private readonly Dictionary<string, long> _memo = [];
         public override long SolvePart1()
         {
-            _patterns = Input.First().Split(", ").ToList();
+            _patterns = [.. Input.First().Split(", ")];
             long result = 0;
             foreach (var line in Input.Skip(2))
             {
@@ -17,7 +17,7 @@
 
         public override long SolvePart2()
         {
-            _patterns = Input.First().Split(", ").ToList();
+            _patterns = [.. Input.First().Split(", ")];
             long result = 0;
             foreach (var line in Input.Skip(2))
             {

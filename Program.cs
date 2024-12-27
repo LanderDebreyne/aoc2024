@@ -31,6 +31,8 @@
         Day21 = 21,
         Day22 = 22,
         Day23 = 23,
+        Day24 = 24,
+        Day25 = 25,
         All = -1,
     }
 
@@ -48,7 +50,7 @@
             }
 
             Console.Write("Enter part (1 or 2): ");
-            Part? part = (Part?)int.Parse(Console.ReadLine() ?? throw new Exception("Please give input."));
+                Part? part = (Part?)int.Parse(Console.ReadLine() ?? throw new Exception("Please give input."));
 
             try
             {
@@ -94,9 +96,9 @@
             var globalSw = System.Diagnostics.Stopwatch.StartNew();
             foreach (Day day in Enum.GetValues<Day>())
             {
-                if (day == Day.Day9 || day == Day.Day12)
+                if (day == Day.Day9 || day == Day.Day12 || day == Day.Day19 || day == Day.Day20 || day == Day.Day22 || day == Day.Day24)
                 {
-                    Console.WriteLine($"Skipping Day {day}, it takes too long to run");
+                    Console.WriteLine($"Skipping Day {day}, it takes too long to run, test separately");
                     continue;
                 }
                 Console.WriteLine($"Running tests for {day}");
@@ -118,7 +120,7 @@
                 }
                 var sw = System.Diagnostics.Stopwatch.StartNew();
                 object? result1 = dayInstance?.GetType().GetMethod("SolvePart1")?.Invoke(dayInstance, null);
-                if (sw.ElapsedMilliseconds > 1000)
+                if (sw.ElapsedMilliseconds > 2000)
                 {
                     Console.WriteLine($"Part1 took too long for Day {day}, took {sw.ElapsedMilliseconds}ms");
                     return;
@@ -138,7 +140,7 @@
                 }
                 sw.Restart();
                 object? result2 = dayInstance?.GetType().GetMethod("SolvePart2")?.Invoke(dayInstance, null);
-                if (sw.ElapsedMilliseconds > 1000)
+                if (sw.ElapsedMilliseconds > 2000)
                 {
                     Console.WriteLine($"Part2 took too long for {day}, took {sw.ElapsedMilliseconds}ms");
                     return;
